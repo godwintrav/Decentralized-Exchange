@@ -267,4 +267,29 @@ contract('Dex', (accounts) => {
 
     });
 
+    it('should NOT create market order if token does not exist', async () => {
+      await expectRevert(
+         dex.createMarketOrder(
+          web3.utils.fromAscii('TOKEN-DOES-NOT-EXIST'),
+          web3.utils.toWei('1000'),
+          SIDE.BUY,
+          {from: trader1}
+        ),
+        'this token does not exist'
+      );
+    });
+
+    it('should NOT create market order if token is DAI', async () => {
+      await expectRevert(
+         dex.createMarketOrder(
+          DAI,
+          web3.utils.toWei('1000'),
+          SIDE.BUY,
+          {from: trader1}
+        ),
+        'cannot trade DAI'
+      );
+    });
+
+
 });
