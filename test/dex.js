@@ -291,5 +291,51 @@ contract('Dex', (accounts) => {
       );
     });
 
+    it('should NOT create market order if token balance is too low', async () => {
+
+      await dex.deposit(
+        web3.utils.toWei('99'),
+        REP,
+        {from: trader1}
+      );
+
+      await expectRevert(
+        dex.createMarketOrder(
+          REP,
+          web3.utils.toWei('100'),
+          SIDE.SELL,
+          {from: trader1}
+        ),
+        'token balance too low'
+      );
+    });
+
+    it('should NOT create market order if DAI balance is too low', async () => {
+
+      await dex.deposit(
+        web3.utils.toWei('100'),
+        REP,
+        {from: trader1}
+      );
+
+      await dex.createLimitOrder(
+        REP,
+        web3.utils.toWei('100'),
+        10,
+        SIDE.SELL,
+        {from: trader1}
+      );
+
+      await expectRevert(
+         dex.createMarketOrder(
+          REP,
+          web3.utils.toWei('100'),
+          SIDE.BUY,
+          {from: trader2}
+        ),
+        'dai balance too low'
+      );
+    });
+
 
 });
