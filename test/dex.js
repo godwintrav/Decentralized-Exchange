@@ -1,3 +1,4 @@
+const { expectRevert } = require('@openzeppelin/test-helpers');
 const Dai = artifacts.require('mocks/Dai.sol');
 const Rep = artifacts.require('mocks/Rep.sol');
 const Zrx = artifacts.require('mocks/Zrx.sol');
@@ -5,10 +6,10 @@ const Bat = artifacts.require('mocks/Bat.sol');
 const Dex = artifacts.require('Dex.sol');
 
 
-contract('Dex', () => {
+contract('Dex', (accounts) => {
 
     let dai, rep, zrx, bat;
-
+    const [trader1, trader2] = [accounts[1], accounts[2]];
     const [DAI, BAT, REP, ZRX] = ['DAI', 'BAT', 'REP', 'ZRX'].map(ticker => web3.utils.fromAscii(ticker));
 
     beforeEach(async () => {
@@ -20,6 +21,20 @@ contract('Dex', () => {
             dex.addToken(REP, rep.address),
             dex.addToken(ZRX, zrx.address)
         ]);
+
+        const amount = web3.utils.toWei('1000');
+        const seedTokenBalance = async (token, trader) => {
+            await token.faucet(trader, amount);
+            await token.approve(dex.address, amount, {from: trader});
+        };
+
+        await Promise.all(
+            [dai, bat, rep, zrx].map(token => seedTokenBalance(token, trader1))
+        );
+
+        await Promise.all(
+            [dai, bat, rep, zrx].map(token => seedTokenBalance(token, trader2))
+        );
     });
 
 });
