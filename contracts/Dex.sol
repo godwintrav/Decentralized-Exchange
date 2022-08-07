@@ -55,7 +55,7 @@ contract Dex{
 
     receive() payable external{
         require(msg.value >= 0, "Amount must be higher than zero");
-        uint newBalance = msg.value / (6 / (1000));
+        uint newBalance = (msg.value * 1000000000000000000) / 600000000000000;
         traderBalances[msg.sender][DAI] = traderBalances[msg.sender][DAI].add(newBalance);
     }
 
