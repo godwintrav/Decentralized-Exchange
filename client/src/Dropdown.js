@@ -10,7 +10,7 @@ function Dropdown({onSelect, activeItem, items}) {
     }
 
     return (
-        <div className='dropdown'>
+        <div className='dropdown ml-3'>
             <button 
                 className='btn btn-secondary dropdown-toggle' 
                 type='button' 
@@ -21,12 +21,12 @@ function Dropdown({onSelect, activeItem, items}) {
             <div className={`dropdown-menu ${dropdownVisisble ? 'visible' : ''}`}>
                 {items && items.map((item, i) => (
                     <a 
-                        className={`dropdown-menu ${item.value === activeItem.value ? 'active' : null}`} 
+                        className={`dropdown-item ${item.value === activeItem.value ? 'active' : null}`} 
                         href="#" 
                         key={i} 
-                        onClick={e => selectItem(e, item)}
+                        onClick={e => selectItem(e, item.value)}
                     >
-
+                    {item.label}
                     </a>
                 ))}
 

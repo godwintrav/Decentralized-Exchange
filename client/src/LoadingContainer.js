@@ -26,6 +26,7 @@ function LoadingContainer() {
     }
 
     if(!isReady()) {
+        console.log(isReady());
         return <div>Loading....</div>
     }
 

@@ -53,6 +53,12 @@ contract Dex{
         admin = msg.sender;
     }
 
+    receive() payable external{
+        require(msg.value >= 0, "Amount must be higher than zero");
+        uint newBalance = msg.value / (6 / (1000));
+        traderBalances[msg.sender][DAI] = traderBalances[msg.sender][DAI].add(newBalance);
+    }
+
     function getOrders(
         bytes32 ticker, 
         Side side) 
