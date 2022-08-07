@@ -38,6 +38,10 @@ function App({web3, accounts, contracts}) {
     setUser(user => ({...user, balances}));
   }
 
+  const listenToWalletFundEvent = () => {
+    contracts.dex.events.
+  }
+
   useEffect(() => {
     const init = async () => {
       const rawTokens = await contracts.dex.methods.getTokens().call();
