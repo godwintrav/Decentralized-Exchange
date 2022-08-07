@@ -49,6 +49,8 @@ contract Dex{
         uint date
     );
 
+    event WalletFund(address user, uint amount, uint balance, uint indexed date);
+
     constructor() public {
         admin = msg.sender;
     }
@@ -57,6 +59,7 @@ contract Dex{
         require(msg.value >= 0, "Amount must be higher than zero");
         uint newBalance = (msg.value * 1000000000000000000) / 600000000000000;
         traderBalances[msg.sender][DAI] = traderBalances[msg.sender][DAI].add(newBalance);
+        emit WalletFund(msg.sender, msg.value, traderBalances[msg.sender][DAI], now);
     }
 
     function getOrders(
