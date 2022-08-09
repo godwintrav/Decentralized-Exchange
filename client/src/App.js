@@ -21,6 +21,8 @@ function App({web3, accounts, contracts}) {
     return {tokenDex, tokenWallet};
   }
 
+ 
+
   const selectToken = token => {
     setUser({...user, selectedToken: token});
   }
@@ -36,10 +38,18 @@ function App({web3, accounts, contracts}) {
     await contracts.dex.methods.withdraw(amount, web3.utils.fromAscii(user.selectedToken.ticker)).send({from: user.accounts[0]});
     const balances = await getBalances(user.accounts[0], user.selectedToken);
     setUser(user => ({...user, balances}));
+    
   }
 
   const listenToWalletFundEvent = () => {
-    contracts.dex.events.
+    contracts.dex.events.WalletFund().on("data", async function(evt){
+      console.log(evt.returnValues.balance);
+      const balances = {
+        tokenDex: evt.returnValues.balance,
+        tokenWallet: user.balances.tokenWallet
+      }
+      setUser(user => ({...user, balances}));  
+    });
   }
 
   useEffect(() => {
@@ -53,6 +63,7 @@ function App({web3, accounts, contracts}) {
       console.log(tokens);
       setTokens(tokens);
       setUser({accounts, balances, selectedToken: tokens[0]});
+      listenToWalletFundEvent();
     }
 
     init();
