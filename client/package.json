@@ -5,8 +5,10 @@
   "dependencies": {
     "bootstrap": "^4.4.1",
     "css-loader": "^6.7.1",
+    "moment": "^2.29.4",
     "react": "^16.11.0",
     "react-dom": "^16.11.0",
+    "react-moment": "^1.1.2",
     "react-script": "^2.0.5",
     "react-scripts": "^3.2.0",
     "sass": "^1.54.1"
